@@ -32,6 +32,7 @@ class DataCleaning:
         query.phone_number = query.phone_number.astype('int64')
         query.drop("index", axis=1, inplace=True)
         query.reset_index(drop=True, inplace=True)
+        return query
         
     @staticmethod
     def clean_card_data(card_details):
@@ -40,6 +41,7 @@ class DataCleaning:
         cards_err = ['NB71VBAHJE','WJVMUO4QX6', 'JRPRLPIBZ2', 'TS8A81WFXV', 'JCQMU8FN85', '5CJH7ABGDR', 'DE488ORDXY', 'OGJTXI6X1H', '1M38DYQTZV', 'DLWF2HANZF', 'XGZBYBYGUW', 'UA07L7EILH', 'BU9U947ZGV', '5MFWFBZRM9']
         card_details = card_details[~card_details['card_provider'].isin(cards_err)]
         card_details['card_number'][card_details['card_number'].str.contains('[^0-9]', na=False)] = card_details['card_number'][card_details['card_number'].str.contains('[^0-9]', na=False)].str.replace('?','')
+        return card_details
     
     @staticmethod
     def clean_store_data(stores):
@@ -57,6 +59,7 @@ class DataCleaning:
         stores.loc[stores_staff_alphanum_rows, 'staff_numbers'].str.replace('[^0-9]', '', regex=True)
         stores.at[0, 'latitude'] = 0
         stores.at[0, 'longitude'] = 0
+        return stores
             
     @staticmethod
     def convert_product_weights(products):
@@ -82,11 +85,13 @@ class DataCleaning:
         products.loc[307, 'date_added'] = '2018-10-22'
         products.loc[1217, 'date_added'] = '2017-09-06'
         products.date_added = pd.to_datetime(products.date_added)
+        return products
         
     @staticmethod
     def clean_orders_data(orders):
         orders.drop(columns=['first_name', 'last_name', '1'], inplace=True)
         orders.set_index('index', inplace=True, verify_integrity=True)
+        return orders
     
     @staticmethod
     def clean_dates(dates):
@@ -98,7 +103,5 @@ class DataCleaning:
                'YRYN6Y8SPJ', 'JMW951JPZC', 'DZC37NLW4F', 'SYID3PBQLP',
                'IXNB2XXEKB', 'MZIS9E7IXD']
         dates = dates[~dates['time_period'].isin(dates_err)]
-        dates['date_time'] = dates['year'] + '-' + dates['month'] + '-' + dates['day'] + ' ' + dates['timestamp']
-        dates.date_time = pd.to_datetime(dates.date_time)
-        dates.drop(columns=['timestamp', 'month', 'year', 'day'], inplace=True)
         dates.dropna(axis=0, inplace=True)
+        return dates
