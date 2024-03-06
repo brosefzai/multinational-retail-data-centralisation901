@@ -1,11 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Feb 28 11:33:10 2024
-
-@author: frasier
-"""
-
 --MILESTONE4
 
 --task 1:
